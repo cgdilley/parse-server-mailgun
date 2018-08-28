@@ -23,10 +23,10 @@ class MailgunAdapter extends MailAdapter {
         if (!options) {
             throw new Error(ERRORS.missing_configuration);
         }
-
+        
         super(options);
 
-        const { apiKey, domain, fromAddress } = options;
+        const { apiKey, domain, fromAddress, host, endpoint, protocol } = options;
         if (!apiKey || !domain || !fromAddress) {
             throw new Error(ERRORS.missing_mailgun_settings);
         }
@@ -48,8 +48,10 @@ class MailgunAdapter extends MailAdapter {
             }
         }
 
+        const mailgunOptions = { apiKey, domain, host, endpoint, protocol };
+
         this.mailcomposer = mailcomposer;
-        this.mailgun = mailgun({ apiKey, domain });
+        this.mailgun = mailgun(mailgunOptions);
         this.fromAddress = fromAddress;
         this.templates = templates;
         this.cache = {};
